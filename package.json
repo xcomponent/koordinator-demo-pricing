@@ -1,0 +1,13 @@
+{
+  "name": "pricingDemoWorkers",
+  "version": "0.1.0",
+  "description": "Workers for Pricing Demo",
+  "author": "XComponent <dev@xcomponent.com> (http://www.xcomponent.com)",
+  "license": "Apache-2.0",
+  "private": "true",
+  "dependencies": {
+    "request": "^2.87.0",
+    "request-promise-native": "^1.0.5",
+    "uuid": "^3.3.2"
+  }
+}
