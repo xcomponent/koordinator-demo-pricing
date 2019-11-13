@@ -7,10 +7,59 @@ provider "kubernetes" {
   load_config_file       = false
 }
 
+resource "kubernetes_config_map" "scenario" {
+  metadata {
+    name = "demo-pricing-scenario"
+    namespace = "${var.kubernetes_namespace}"
+    labels = {
+      App = "demo",
+      Demo = "pricing"
+    }
+  }
+
+  binary_data = {
+    "scenario.json" = "${filebase64("${path.module}/scenario.json")}"
+  }
+}
+
+resource "kubernetes_job" "install_scenario" {
+  metadata {
+    name = "install-scenario"
+    namespace = "${var.kubernetes_namespace}"
+    labels = {
+      App = "demo",
+      Demo = "pricing"
+    }
+  }
+  spec {
+    template {
+      metadata {}
+      spec {
+        container {
+          name    = "runner"
+          image   = "curlimages/curl:7.67.0"
+          command = ["/usr/bin/curl", "-X", "POST", "${var.koordinator_front}/workflowsservice/api/scenario-definitions", "-H", "Authorization: Bearer ${var.koordinator_token}", "-H", "Content-Type: application/json", "--data", "@/opt/demo/config/scenario.json", "--verbose", "--fail"]
+          volume_mount {
+            name = "config-volume"
+            mount_path = "/opt/demo/config/"
+          }
+        }
+        volume {
+          name = "config-volume"
+          config_map {
+            name = "${kubernetes_config_map.scenario.metadata[0].name}"
+
+          }
+        }
+      }
+    }
+  }
+}
+
 resource "kubernetes_pod" "worker_init_pricing" {
   metadata {
     name = "worker-init-pricing"
-    namespace = "demo"
+    namespace = "${var.kubernetes_namespace}"
     labels = {
       App = "demo",
       Demo = "pricing"
@@ -24,6 +73,82 @@ resource "kubernetes_pod" "worker_init_pricing" {
       env {
         name = "SCRIPT_NAME"
         value = "initPricing.js"
+      }
+      env {
+        name = "DEMO_TASK_CATALOG_URL"
+        value = "${var.koordinator_front}/taskcatalogservice"
+      }
+      env {
+        name = "DEMO_POLLING_URL"
+        value = "${var.koordinator_front}/pollingservice"
+      }
+      env {
+        name = "DEMO_TASK_STATUS_URL"
+        value = "${var.koordinator_front}/taskstatusservice"
+      }
+      env {
+        name = "DEMO_TOKEN"
+        value   = "${var.koordinator_token}"
+      }
+    }
+  }
+}
+
+resource "kubernetes_pod" "worker_load_pricing_context" {
+  metadata {
+    name = "worker-load-pricing-context"
+    namespace = "${var.kubernetes_namespace}"
+    labels = {
+      App = "demo",
+      Demo = "pricing"
+    }
+  }
+
+  spec {
+    container {
+      image = "xcomponentteam/koordinator-demo-pricing:latest"
+      name  = "worker"
+      env {
+        name = "SCRIPT_NAME"
+        value = "loadPricingContext.js"
+      }
+      env {
+        name = "DEMO_TASK_CATALOG_URL"
+        value = "${var.koordinator_front}/taskcatalogservice"
+      }
+      env {
+        name = "DEMO_POLLING_URL"
+        value = "${var.koordinator_front}/pollingservice"
+      }
+      env {
+        name = "DEMO_TASK_STATUS_URL"
+        value = "${var.koordinator_front}/taskstatusservice"
+      }
+      env {
+        name = "DEMO_TOKEN"
+        value   = "${var.koordinator_token}"
+      }
+    }
+  }
+}
+
+resource "kubernetes_pod" "worker_price" {
+  metadata {
+    name = "worker-price"
+    namespace = "${var.kubernetes_namespace}"
+    labels = {
+      App = "demo",
+      Demo = "pricing"
+    }
+  }
+
+  spec {
+    container {
+      image = "xcomponentteam/koordinator-demo-pricing:latest"
+      name  = "worker"
+      env {
+        name = "SCRIPT_NAME"
+        value = "price.js"
       }
       env {
         name = "DEMO_TASK_CATALOG_URL"

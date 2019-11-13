@@ -1,146 +1,146 @@
 {
-	"id": "761f4c2b-ae50-4d53-8752-71e340723d03",
-	"name": "Pricing Demo",
-	"type": "CommandCenter",
-	"tasks": [
-		{
-			"type": "Fork",
-			"catalogTaskDefinitionVersion": 0,
-			"id": "4c431574-8fab-4508-8480-eed4694baaa4",
-			"maxRetriesOnError": 0,
-			"subTasks": [
-				{
-					"type": "Sequence",
-					"catalogTaskDefinitionVersion": 0,
-					"id": "5802cbfa-f2b3-4dba-ad32-19762b5416b7",
-					"maxRetriesOnError": 0,
-					"subTasks": [
-						{
-							"type": "Worker",
-							"catalogTaskDefinitionNamespace": "Demo",
-							"catalogTaskDefinitionName": "InitPricing",
-							"catalogTaskDefinitionVersion": 3,
-							"id": "e483c405-2371-47a8-bf93-7bae2d5b0e97",
-							"description": "initialization",
-							"inputData": {
-								"type": "[workflowInstance.inputData.type]",
-								"name": "[workflowInstance.inputData.name]",
-								"asOf": "[workflowInstance.inputData.asOf_date][workflowInstance.inputData.asOf_Timestamp]"
-							},
-							"outputData": {
-								"id_pricing": ""
-							},
-							"maxRetriesOnError": 0,
-							"timeOutInMillis": 60000
-						},
-						{
-							"type": "Pipeline",
-							"catalogTaskDefinitionVersion": 0,
-							"id": "203ae12b-59e4-47c6-9a66-03f4254c4179",
-							"maxRetriesOnError": 0,
-							"subTasks": [
-								{
-									"type": "Fork",
-									"catalogTaskDefinitionVersion": 0,
-									"id": "9097100f-5fd4-49b2-a3d4-0f953609562c",
-									"maxRetriesOnError": 0,
-									"subTasks": [
-										{
-											"type": "Sequence",
-											"catalogTaskDefinitionVersion": 0,
-											"id": "c4d4e13d-d993-47fc-a428-2675702e424c",
-											"maxRetriesOnError": 0,
-											"subTasks": [
-												{
-													"type": "Worker",
-													"catalogTaskDefinitionNamespace": "Demo",
-													"catalogTaskDefinitionName": "LoadPricingContext",
-													"catalogTaskDefinitionVersion": 3,
-													"id": "15c49552-70a6-4a46-87df-b281c8c2fb9c",
-													"description": "Load Pricing Data",
-													"inputData": {
-														"type": "[workflowInstance.inputData.type]",
-														"name": "[workflowInstance.inputData.name]",
-														"asOf": "[workflowInstance.inputData.asOf_date][workflowInstance.inputData.asOf_Timestamp]"
-													},
-													"outputData": {
-														"id_ref_data": ""
-													},
-													"maxRetriesOnError": 2,
-													"timeOutInMillis": 600000
-												},
-												{
-													"type": "Worker",
-													"catalogTaskDefinitionNamespace": "Demo",
-													"catalogTaskDefinitionName": "Price",
-													"catalogTaskDefinitionVersion": 4,
-													"id": "77606300-36ef-4d9b-b312-9e9132fbbc1b",
-													"description": "Pricing Service",
-													"inputData": {
-														"type": "[workflowInstance.inputData.type]",
-														"name": "[workflowInstance.inputData.name]",
-														"asOf": "[workflowInstance.inputData.asOf_date][workflowInstance.inputData.asOf_Timestamp]",
-														"id_pricing": "[e483c405-2371-47a8-bf93-7bae2d5b0e97.outputData.id_pricing]"
-													},
-													"outputData": {},
-													"maxRetriesOnError": 2,
-													"timeOutInMillis": 600000
-												}
-											]
-										}
-									]
-								}
-							]
-						},
-						{
-							"type": "Worker",
-							"catalogTaskDefinitionNamespace": "AwsLambda",
-							"catalogTaskDefinitionName": "DemoPricing_Report",
-							"catalogTaskDefinitionVersion": 2,
-							"id": "f299732e-ca94-4e2d-971c-c266a1c058f5",
-							"description": "P&L Report",
-							"inputData": {
-								"asOf": "[workflowInstance.inputData.asOf_date][workflowInstance.inputData.asOf_Timestamp]",
-								"id_pricing": "",
-								"name": "[workflowInstance.inputData.name]",
-								"type": "[workflowInstance.inputData.type]"
-							},
-							"outputData": {
-								"url": "",
-								"HttpResponseStatusCode": ""
-							},
-							"maxRetriesOnError": 0
-						}
-					]
-				}
-			]
-		}
-	],
-	"inputData": {
-		"type": "Desk",
-		"type#type": "string",
-		"type#regex": "",
-		"name": "DLP",
-		"name#type": "string",
-		"name#regex": "",
-		"asOf_date": "",
-		"asOf_date#type": "string",
-		"asOf_date#regex": "",
-		"asOf_Timestamp": "",
-		"asOf_Timestamp#type": "string",
-		"asOf_Timestamp#regex": ""
-	},
-	"outputData": {},
-	"live": true,
-	"timeoutInMillis": 1200000,
-	"workspaceName": "Formation",
-	"description": "Sample pricing workflow",
-	"isDeleted": false,
-	"schemaVersion": 0,
-	"versionNumber": 3,
-	"versionUserName": "demo",
-	"versionTimeStamp": "2019-11-08T09:30:44.3513780Z",
-	"creationUserName": "demo",
-	"creationTimeStamp": "2019-11-05T09:56:53.0551600Z",
-	"requestId": "8e69d7fc-0b5b-410c-90f2-6e5f31126554"
+        "id": "761f4c2b-ae50-4d53-8752-71e340723d03",
+        "name": "Pricing Demo",
+        "type": "CommandCenter",
+        "tasks": [
+                {
+                        "type": "Fork",
+                        "catalogTaskDefinitionVersion": 0,
+                        "id": "4c431574-8fab-4508-8480-eed4694baaa4",
+                        "maxRetriesOnError": 0,
+                        "subTasks": [
+                                {
+                                        "type": "Sequence",
+                                        "catalogTaskDefinitionVersion": 0,
+                                        "id": "5802cbfa-f2b3-4dba-ad32-19762b5416b7",
+                                        "maxRetriesOnError": 0,
+                                        "subTasks": [
+                                                {
+                                                        "type": "Worker",
+                                                        "catalogTaskDefinitionNamespace": "Demo",
+                                                        "catalogTaskDefinitionName": "InitPricing",
+                                                        "catalogTaskDefinitionVersion": 3,
+                                                        "id": "e483c405-2371-47a8-bf93-7bae2d5b0e97",
+                                                        "description": "initialization",
+                                                        "inputData": {
+                                                                "type": "[workflowInstance.inputData.type]",
+                                                                "name": "[workflowInstance.inputData.name]",
+                                                                "asOf": "[workflowInstance.inputData.asOf_date][workflowInstance.inputData.asOf_Timestamp]"
+                                                        },
+                                                        "outputData": {
+                                                                "id_pricing": ""
+                                                        },
+                                                        "maxRetriesOnError": 0,
+                                                        "timeOutInMillis": 60000
+                                                },
+                                                {
+                                                        "type": "Pipeline",
+                                                        "catalogTaskDefinitionVersion": 0,
+                                                        "id": "203ae12b-59e4-47c6-9a66-03f4254c4179",
+                                                        "maxRetriesOnError": 0,
+                                                        "subTasks": [
+                                                                {
+                                                                        "type": "Fork",
+                                                                        "catalogTaskDefinitionVersion": 0,
+                                                                        "id": "9097100f-5fd4-49b2-a3d4-0f953609562c",
+                                                                        "maxRetriesOnError": 0,
+                                                                        "subTasks": [
+                                                                                {
+                                                                                        "type": "Sequence",
+                                                                                        "catalogTaskDefinitionVersion": 0,
+                                                                                        "id": "c4d4e13d-d993-47fc-a428-2675702e424c",
+                                                                                        "maxRetriesOnError": 0,
+                                                                                        "subTasks": [
+                                                                                                {
+                                                                                                        "type": "Worker",
+                                                                                                        "catalogTaskDefinitionNamespace": "Demo",
+                                                                                                        "catalogTaskDefinitionName": "LoadPricingContext",
+                                                                                                        "catalogTaskDefinitionVersion": 3,
+                                                                                                        "id": "15c49552-70a6-4a46-87df-b281c8c2fb9c",
+                                                                                                        "description": "Load Pricing Data",
+                                                                                                        "inputData": {
+                                                                                                                "type": "[workflowInstance.inputData.type]",
+                                                                                                                "name": "[workflowInstance.inputData.name]",
+                                                                                                                "asOf": "[workflowInstance.inputData.asOf_date][workflowInstance.inputData.asOf_Timestamp]"
+                                                                                                        },
+                                                                                                        "outputData": {
+                                                                                                                "id_ref_data": ""
+                                                                                                        },
+                                                                                                        "maxRetriesOnError": 2,
+                                                                                                        "timeOutInMillis": 600000
+                                                                                                },
+                                                                                                {
+                                                                                                        "type": "Worker",
+                                                                                                        "catalogTaskDefinitionNamespace": "Demo",
+                                                                                                        "catalogTaskDefinitionName": "Price",
+                                                                                                        "catalogTaskDefinitionVersion": 4,
+                                                                                                        "id": "77606300-36ef-4d9b-b312-9e9132fbbc1b",
+                                                                                                        "description": "Pricing Service",
+                                                                                                        "inputData": {
+                                                                                                                "type": "[workflowInstance.inputData.type]",
+                                                                                                                "name": "[workflowInstance.inputData.name]",
+                                                                                                                "asOf": "[workflowInstance.inputData.asOf_date][workflowInstance.inputData.asOf_Timestamp]",
+                                                                                                                "id_pricing": "[e483c405-2371-47a8-bf93-7bae2d5b0e97.outputData.id_pricing]"
+                                                                                                        },
+                                                                                                        "outputData": {},
+                                                                                                        "maxRetriesOnError": 2,
+                                                                                                        "timeOutInMillis": 600000
+                                                                                                }
+                                                                                        ]
+                                                                                }
+                                                                        ]
+                                                                }
+                                                        ]
+                                                },
+                                                {
+                                                        "type": "Worker",
+                                                        "catalogTaskDefinitionNamespace": "AwsLambda",
+                                                        "catalogTaskDefinitionName": "DemoPricing_Report",
+                                                        "catalogTaskDefinitionVersion": 2,
+                                                        "id": "f299732e-ca94-4e2d-971c-c266a1c058f5",
+                                                        "description": "P&L Report",
+                                                        "inputData": {
+                                                                "asOf": "[workflowInstance.inputData.asOf_date][workflowInstance.inputData.asOf_Timestamp]",
+                                                                "id_pricing": "",
+                                                                "name": "[workflowInstance.inputData.name]",
+                                                                "type": "[workflowInstance.inputData.type]"
+                                                        },
+                                                        "outputData": {
+                                                                "url": "",
+                                                                "HttpResponseStatusCode": ""
+                                                        },
+                                                        "maxRetriesOnError": 0
+                                                }
+                                        ]
+                                }
+                        ]
+                }
+        ],
+        "inputData": {
+                "type": "Desk",
+                "type#type": "string",
+                "type#regex": "",
+                "name": "DLP",
+                "name#type": "string",
+                "name#regex": "",
+                "asOf_date": "",
+                "asOf_date#type": "string",
+                "asOf_date#regex": "",
+                "asOf_Timestamp": "",
+                "asOf_Timestamp#type": "string",
+                "asOf_Timestamp#regex": ""
+        },
+        "outputData": {},
+        "live": true,
+        "timeoutInMillis": 1200000,
+        "workspaceName": "DefaultWorkspace",
+        "description": "Sample pricing workflow",
+        "isDeleted": false,
+        "schemaVersion": 0,
+        "versionNumber": 3,
+        "versionUserName": "demo",
+        "versionTimeStamp": "2019-11-08T09:30:44.3513780Z",
+        "creationUserName": "demo",
+        "creationTimeStamp": "2019-11-05T09:56:53.0551600Z",
+        "requestId": "8e69d7fc-0b5b-410c-90f2-6e5f31126554"
 }
