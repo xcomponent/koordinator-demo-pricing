@@ -10,6 +10,8 @@ This scenario illustrates the use of XComponent Scenario to implement a pricing 
 * Pipelines
 * NodeJS Workers
 * AWS Lamba functions
+* Partial executions
+* Automatic retries
 
 ## Requirements
 
