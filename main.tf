@@ -60,7 +60,16 @@ resource "kubernetes_job" "install_scenario" {
         container {
           name    = "runner"
           image   = "curlimages/curl:7.67.0"
-          command = ["/usr/bin/curl", "-X", "POST", "${var.koordinator_front}/workflowsservice/api/scenario-definitions", "-H", "Authorization: Bearer ${var.koordinator_token}", "-H", "Content-Type: application/json", "--data", "@/opt/demo/config/scenario.json", "--verbose", "--fail"]
+          command = [
+            "/usr/bin/curl",
+            "-X", "POST",
+            "${var.koordinator_front}/workflowsservice/api/scenario-definitions",
+            "-H", "Authorization: Bearer ${var.koordinator_token}",
+            "-H", "Content-Type: application/json",
+            "--data", "@/opt/demo/config/scenario.json",
+            "--verbose",
+            "--fail"
+          ]
           volume_mount {
             name = "config-volume"
             mount_path = "/opt/demo/config/"
