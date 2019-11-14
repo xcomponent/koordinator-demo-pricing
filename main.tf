@@ -209,7 +209,7 @@ data "archive_file" "report_lambda" {
 
 resource "aws_lambda_function" "report" {
   filename      = "${data.archive_file.report_lambda.output_path}"
-  function_name = "test_report_lambda"
+  function_name = "DemoPricing_Report"
   role          = "arn:aws:iam::163696169398:role/S3FullAccess"
   handler       = "index.handler"
 
