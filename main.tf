@@ -40,7 +40,7 @@ resource "kubernetes_config_map" "scenario" {
   }
 
   binary_data = {
-    "scenario.json" = "${filebase64("${path.module}/scenario.json")}"
+    "scenario.json" = "${filebase64("${path.module}/scenario/scenario.json")}"
   }
 }
 
