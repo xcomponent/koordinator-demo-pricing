@@ -1,13 +1,13 @@
-variable "kubernetes_host" { default = ""}
-variable "kubernetes_client_certificate" { default     = "" }
-variable "kubernetes_client_key" { default             = "" }
-variable "kubernetes_cluster_ca_certificate" { default = "" }
+variable "kubernetes_host" {}
+variable "kubernetes_client_certificate" {}
+variable "kubernetes_client_key" {}
+variable "kubernetes_cluster_ca_certificate" {}
 variable "kubernetes_namespace" { default = "default" }
-variable "koordinator_front" { default = "" }
-variable "koordinator_token" { default = "" }
-variable "aws_access_key" { default = "" }
-variable "aws_secret_key" { default = "" }
-variable "aws_region" { default = "" }
+variable "koordinator_front" {}
+variable "koordinator_token" {}
+variable "aws_access_key" {}
+variable "aws_secret_key" {}
+variable "aws_region" {}
 
 provider "archive" {
   version = "1.3.0"
