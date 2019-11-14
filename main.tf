@@ -7,10 +7,15 @@ variable "koordinator_front" { default = "" }
 variable "koordinator_token" { default = "" }
 variable "aws_access_key" { default = "" }
 variable "aws_secret_key" { default = "" }
+variable "aws_region" { default = "" }
+
+provider "archive" {
+  version = "1.3.0"
+}
 
 provider "aws" {
-  version = "~> 2.0"
-  region  = "eu-west-3"
+  version = "2.35.0"
+  region  = "${var.aws_region}"
   access_key = "${var.aws_access_key}"
   secret_key = "${var.aws_secret_key}"
 }
