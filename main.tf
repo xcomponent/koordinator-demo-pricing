@@ -217,4 +217,14 @@ resource "aws_lambda_function" "report" {
   source_code_hash = "${data.archive_file.report_lambda.output_base64sha256 }"
 
   runtime = "nodejs10.x"
+
+  tags = {
+    "com.xcomponent.label" = "Démo"
+    "com.xcomponent.outputs.statusCode" = "String"
+    "com.xcomponent.outputs.url" = "String"
+    "com.xcomponent.inputs.type" = "String"
+    "com.xcomponent.inputs.name" = "String"
+    "com.xcomponent.inputs.id_pricing" = "String"
+    "com.xcomponent.inputs.asOf" = "String"
+  }
 }
