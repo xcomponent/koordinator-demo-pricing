@@ -8,6 +8,7 @@ variable "koordinator_token" {}
 variable "aws_access_key" {}
 variable "aws_secret_key" {}
 variable "aws_region" {}
+variable "koordinator_aws_lambda_label" {}
 
 provider "archive" {
   version = "1.3.0"
@@ -219,7 +220,7 @@ resource "aws_lambda_function" "report" {
   runtime = "nodejs10.x"
 
   tags = {
-    "com.xcomponent.label" = "Démo"
+    "com.xcomponent.label" = "${var.koordinator_aws_lambda_label}"
     "com.xcomponent.outputs.statusCode" = "String"
     "com.xcomponent.outputs.url" = "String"
     "com.xcomponent.inputs.type" = "String"
