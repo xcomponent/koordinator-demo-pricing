@@ -54,6 +54,7 @@ resource "kubernetes_job" "install_scenario" {
     }
   }
   spec {
+    backoff_limit = 10
     template {
       metadata {}
       spec {
