@@ -6,18 +6,14 @@ const bucketPrefix = 'demopricing-xcomponent';
 var s3 = new AWS.S3();
 
 const uploadFile = async (fileContent, fileName) => {
-
-  // Setting up S3 upload parameters
   const params = {
     Bucket: bucketPrefix,
-    Key: 'generatedreports/' + fileName, // File name you want to save as in S3
+    Key: 'generatedreports/' + fileName,
     Body: fileContent,
     ACL: 'public-read'
   };
   console.log("Uploading files to the bucket");
-  // Uploading files to the bucket
   await (s3.upload(params).promise());
-
 };
 
 
@@ -27,7 +23,7 @@ async function generateReport(filename, type, name, id_pricing, asOf) {
     Key: 'ReportTemplate/report.htm'
   }
 
-  console.log("generateReport");
+  console.log("Generating report");
 
   var result = (await (s3.getObject(getParams).promise())).Body.toString();
 
@@ -36,17 +32,10 @@ async function generateReport(filename, type, name, id_pricing, asOf) {
     .replace(/\$idPricing/g, id_pricing)
     .replace(/\$asOf/g, asOf);
 
-  // console.log("report.html:" + result);
-
-
   await uploadFile(result, filename);
-
-
 }
 
 exports.handler = async (event) => {
-
-
   const fileName = Date.now().toString() + ".html";
 
   await generateReport(
