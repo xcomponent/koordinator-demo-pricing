@@ -5,6 +5,15 @@ variable "kubernetes_cluster_ca_certificate" { default = "" }
 variable "kubernetes_namespace" { default = "demo" }
 variable "koordinator_front" { default = "" }
 variable "koordinator_token" { default = "" }
+variable "aws_access_key" { default = "" }
+variable "aws_secret_key" { default = "" }
+
+provider "aws" {
+  version = "~> 2.0"
+  region  = "eu-west-3"
+  access_key = "${var.aws_access_key}"
+  secret_key = "${var.aws_secret_key}"
+}
 
 provider "kubernetes" {
   version                = "1.9.0"
@@ -176,4 +185,21 @@ resource "kubernetes_pod" "worker_price" {
       }
     }
   }
+}
+
+data "archive_file" "report_lambda" {
+  type        = "zip"
+  source_dir = "${path.module}/lambda/"
+  output_path = "${path.module}/lambda.zip"
+}
+
+resource "aws_lambda_function" "report" {
+  filename      = "${data.archive_file.report_lambda.output_path}"
+  function_name = "test_report_lambda"
+  role          = "arn:aws:iam::163696169398:role/S3FullAccess"
+  handler       = "index.handler"
+
+  source_code_hash = "${data.archive_file.report_lambda.output_base64sha256 }"
+
+  runtime = "nodejs10.x"
 }
