@@ -96,7 +96,7 @@
                                                         "type": "Worker",
                                                         "catalogTaskDefinitionNamespace": "AwsLambda",
                                                         "catalogTaskDefinitionName": "DemoPricing_Report",
-                                                        "catalogTaskDefinitionVersion": 2,
+                                                        "catalogTaskDefinitionVersion": 4,
                                                         "id": "f299732e-ca94-4e2d-971c-c266a1c058f5",
                                                         "description": "P&L Report",
                                                         "inputData": {
