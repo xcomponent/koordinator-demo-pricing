@@ -16,24 +16,24 @@ provider "archive" {
 
 provider "aws" {
   version = "2.35.0"
-  region  = "${var.aws_region}"
-  access_key = "${var.aws_access_key}"
-  secret_key = "${var.aws_secret_key}"
+  region  = var.aws_region
+  access_key = var.aws_access_key
+  secret_key = var.aws_secret_key
 }
 
 provider "kubernetes" {
   version                = "1.9.0"
-  host                   = "${var.kubernetes_host}"
-  client_certificate = "${base64decode(var.kubernetes_client_certificate)}"
-  client_key = "${base64decode(var.kubernetes_client_key)}"
-  cluster_ca_certificate = "${base64decode(var.kubernetes_cluster_ca_certificate)}"
+  host                   = var.kubernetes_host
+  client_certificate = base64decode(var.kubernetes_client_certificate)
+  client_key = base64decode(var.kubernetes_client_key)
+  cluster_ca_certificate = base64decode(var.kubernetes_cluster_ca_certificate)
   load_config_file       = false
 }
 
 resource "kubernetes_config_map" "scenario" {
   metadata {
     name = "demo-pricing-scenario"
-    namespace = "${var.kubernetes_namespace}"
+    namespace = var.kubernetes_namespace
     labels = {
       App = "demo",
       Demo = "pricing"
@@ -48,7 +48,7 @@ resource "kubernetes_config_map" "scenario" {
 resource "kubernetes_job" "install_scenario" {
   metadata {
     name = "install-scenario"
-    namespace = "${var.kubernetes_namespace}"
+    namespace = var.kubernetes_namespace
     labels = {
       App = "demo",
       Demo = "pricing"
@@ -80,7 +80,7 @@ resource "kubernetes_job" "install_scenario" {
         volume {
           name = "config-volume"
           config_map {
-            name = "${kubernetes_config_map.scenario.metadata[0].name}"
+            name = kubernetes_config_map.scenario.metadata[0].name
 
           }
         }
@@ -92,7 +92,7 @@ resource "kubernetes_job" "install_scenario" {
 resource "kubernetes_pod" "worker_init_pricing" {
   metadata {
     name = "worker-init-pricing"
-    namespace = "${var.kubernetes_namespace}"
+    namespace = var.kubernetes_namespace
     labels = {
       App = "demo",
       Demo = "pricing"
@@ -121,7 +121,7 @@ resource "kubernetes_pod" "worker_init_pricing" {
       }
       env {
         name = "DEMO_TOKEN"
-        value   = "${var.koordinator_token}"
+        value   = var.koordinator_token
       }
     }
   }
@@ -130,7 +130,7 @@ resource "kubernetes_pod" "worker_init_pricing" {
 resource "kubernetes_pod" "worker_load_pricing_context" {
   metadata {
     name = "worker-load-pricing-context"
-    namespace = "${var.kubernetes_namespace}"
+    namespace = var.kubernetes_namespace
     labels = {
       App = "demo",
       Demo = "pricing"
@@ -159,7 +159,7 @@ resource "kubernetes_pod" "worker_load_pricing_context" {
       }
       env {
         name = "DEMO_TOKEN"
-        value   = "${var.koordinator_token}"
+        value   = var.koordinator_token
       }
     }
   }
@@ -168,7 +168,7 @@ resource "kubernetes_pod" "worker_load_pricing_context" {
 resource "kubernetes_pod" "worker_price" {
   metadata {
     name = "worker-price"
-    namespace = "${var.kubernetes_namespace}"
+    namespace = var.kubernetes_namespace
     labels = {
       App = "demo",
       Demo = "pricing"
@@ -197,7 +197,7 @@ resource "kubernetes_pod" "worker_price" {
       }
       env {
         name = "DEMO_TOKEN"
-        value   = "${var.koordinator_token}"
+        value   = var.koordinator_token
       }
     }
   }
@@ -210,17 +210,17 @@ data "archive_file" "report_lambda" {
 }
 
 resource "aws_lambda_function" "report" {
-  filename      = "${data.archive_file.report_lambda.output_path}"
+  filename      = data.archive_file.report_lambda.output_path
   function_name = "DemoPricing_Report"
   role          = "arn:aws:iam::163696169398:role/S3FullAccess"
   handler       = "index.handler"
 
-  source_code_hash = "${data.archive_file.report_lambda.output_base64sha256 }"
+  source_code_hash = data.archive_file.report_lambda.output_base64sha256
 
   runtime = "nodejs10.x"
 
   tags = {
-    "com.xcomponent.label" = "${var.koordinator_aws_lambda_label}"
+    "com.xcomponent.label" = var.koordinator_aws_lambda_label
     "com.xcomponent.outputs.statusCode" = "String"
     "com.xcomponent.outputs.url" = "String"
     "com.xcomponent.inputs.type" = "String"
