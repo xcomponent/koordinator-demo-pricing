@@ -30,6 +30,12 @@ provider "kubernetes" {
   load_config_file       = false
 }
 
+resource "kubernetes_namespace" "demo" {
+  metadata {
+    name = var.kubernetes_namespace
+  }
+}
+
 resource "kubernetes_config_map" "scenario" {
   metadata {
     name = "demo-pricing-scenario"
@@ -89,7 +95,7 @@ resource "kubernetes_job" "install_scenario" {
   }
 }
 
-resource "kubernetes_pod" "worker_init_pricing" {
+resource "kubernetes_deployment" "worker_init_pricing" {
   metadata {
     name = "worker-init-pricing"
     namespace = var.kubernetes_namespace
@@ -100,34 +106,53 @@ resource "kubernetes_pod" "worker_init_pricing" {
   }
 
   spec {
-    container {
-      image = "xcomponentteam/koordinator-demo-pricing:latest"
-      name  = "worker"
-      env {
-        name = "SCRIPT_NAME"
-        value = "initPricing.js"
+    selector {
+      match_labels = {
+        App = "demo",
+        Demo = "pricing"
       }
-      env {
-        name = "DEMO_TASK_CATALOG_URL"
-        value = "${var.koordinator_front}/taskcatalogservice"
+    }
+    template {
+      metadata {
+        labels = {
+          App = "demo",
+          Demo = "pricing"
+        }
       }
-      env {
-        name = "DEMO_POLLING_URL"
-        value = "${var.koordinator_front}/pollingservice"
-      }
-      env {
-        name = "DEMO_TASK_STATUS_URL"
-        value = "${var.koordinator_front}/taskstatusservice"
-      }
-      env {
-        name = "DEMO_TOKEN"
-        value   = var.koordinator_token
+
+      spec {
+        container {
+          image = "xcomponentteam/koordinator-demo-pricing:latest"
+          name  = "worker"
+          env {
+            name = "SCRIPT_NAME"
+            value = "initPricing.js"
+          }
+          env {
+            name = "DEMO_TASK_CATALOG_URL"
+            value = "${var.koordinator_front}/taskcatalogservice"
+          }
+          env {
+            name = "DEMO_POLLING_URL"
+            value = "${var.koordinator_front}/pollingservice"
+          }
+          env {
+            name = "DEMO_TASK_STATUS_URL"
+            value = "${var.koordinator_front}/taskstatusservice"
+          }
+          env {
+            name = "DEMO_TOKEN"
+            value   = var.koordinator_token
+          }
+        }
       }
     }
   }
+
+
 }
 
-resource "kubernetes_pod" "worker_load_pricing_context" {
+resource "kubernetes_deployment" "worker_load_pricing_context" {
   metadata {
     name = "worker-load-pricing-context"
     namespace = var.kubernetes_namespace
@@ -137,35 +162,51 @@ resource "kubernetes_pod" "worker_load_pricing_context" {
     }
   }
 
-  spec {
-    container {
-      image = "xcomponentteam/koordinator-demo-pricing:latest"
-      name  = "worker"
-      env {
-        name = "SCRIPT_NAME"
-        value = "loadPricingContext.js"
+  spec{
+    selector {
+      match_labels = {
+        App = "demo",
+        Demo = "pricing"
       }
-      env {
-        name = "DEMO_TASK_CATALOG_URL"
-        value = "${var.koordinator_front}/taskcatalogservice"
+    }
+    template {
+      metadata {
+        labels = {
+          App = "demo",
+          Demo = "pricing"
+        }
       }
-      env {
-        name = "DEMO_POLLING_URL"
-        value = "${var.koordinator_front}/pollingservice"
-      }
-      env {
-        name = "DEMO_TASK_STATUS_URL"
-        value = "${var.koordinator_front}/taskstatusservice"
-      }
-      env {
-        name = "DEMO_TOKEN"
-        value   = var.koordinator_token
+      spec {
+        container {
+          image = "xcomponentteam/koordinator-demo-pricing:latest"
+          name  = "worker"
+          env {
+            name = "SCRIPT_NAME"
+            value = "loadPricingContext.js"
+          }
+          env {
+            name = "DEMO_TASK_CATALOG_URL"
+            value = "${var.koordinator_front}/taskcatalogservice"
+          }
+          env {
+            name = "DEMO_POLLING_URL"
+            value = "${var.koordinator_front}/pollingservice"
+          }
+          env {
+            name = "DEMO_TASK_STATUS_URL"
+            value = "${var.koordinator_front}/taskstatusservice"
+          }
+          env {
+            name = "DEMO_TOKEN"
+            value   = var.koordinator_token
+          }
+        }
       }
     }
   }
 }
 
-resource "kubernetes_pod" "worker_price" {
+resource "kubernetes_deployment" "worker_price" {
   metadata {
     name = "worker-price"
     namespace = var.kubernetes_namespace
@@ -175,32 +216,50 @@ resource "kubernetes_pod" "worker_price" {
     }
   }
 
-  spec {
-    container {
-      image = "xcomponentteam/koordinator-demo-pricing:latest"
-      name  = "worker"
-      env {
-        name = "SCRIPT_NAME"
-        value = "price.js"
+  spec{
+    selector {
+      match_labels = {
+        App = "demo",
+        Demo = "pricing"
       }
-      env {
-        name = "DEMO_TASK_CATALOG_URL"
-        value = "${var.koordinator_front}/taskcatalogservice"
+    }
+    template {
+      metadata {
+        labels = {
+          App = "demo",
+          Demo = "pricing"
+        }
       }
-      env {
-        name = "DEMO_POLLING_URL"
-        value = "${var.koordinator_front}/pollingservice"
-      }
-      env {
-        name = "DEMO_TASK_STATUS_URL"
-        value = "${var.koordinator_front}/taskstatusservice"
-      }
-      env {
-        name = "DEMO_TOKEN"
-        value   = var.koordinator_token
+
+      spec {
+        container {
+          image = "xcomponentteam/koordinator-demo-pricing:latest"
+          name  = "worker"
+          env {
+            name = "SCRIPT_NAME"
+            value = "price.js"
+          }
+          env {
+            name = "DEMO_TASK_CATALOG_URL"
+            value = "${var.koordinator_front}/taskcatalogservice"
+          }
+          env {
+            name = "DEMO_POLLING_URL"
+            value = "${var.koordinator_front}/pollingservice"
+          }
+          env {
+            name = "DEMO_TASK_STATUS_URL"
+            value = "${var.koordinator_front}/taskstatusservice"
+          }
+          env {
+            name = "DEMO_TOKEN"
+            value   = var.koordinator_token
+          }
+        }
       }
     }
   }
+
 }
 
 data "archive_file" "report_lambda" {
