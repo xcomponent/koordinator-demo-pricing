@@ -152,9 +152,9 @@ resource "kubernetes_deployment" "worker_init_pricing" {
 
 }
 
-resource "kubernetes_deployment" "worker_load_pricing_context" {
+resource "kubernetes_deployment" "pricing_pipeline" {
   metadata {
-    name = "worker-load-pricing-context"
+    name = "worker-pricing-pipeline"
     namespace = var.kubernetes_namespace
     labels = {
       App = "demo",
@@ -179,7 +179,7 @@ resource "kubernetes_deployment" "worker_load_pricing_context" {
       spec {
         container {
           image = "xcomponentteam/koordinator-demo-pricing:latest"
-          name  = "worker"
+          name  = "load-pricing-worker"
           env {
             name = "SCRIPT_NAME"
             value = "loadPricingContext.js"
@@ -197,44 +197,21 @@ resource "kubernetes_deployment" "worker_load_pricing_context" {
             value = "${var.koordinator_front}/taskstatusservice"
           }
           env {
+            name = "DEMO_SINGLE_NODE"
+            value = "true"
+          }
+          env {
             name = "DEMO_TOKEN"
             value   = var.koordinator_token
           }
+          volume_mount {
+            name       = "topics"
+            mount_path = "/opt/demo/topics"
+          }
         }
-      }
-    }
-  }
-}
-
-resource "kubernetes_deployment" "worker_price" {
-  metadata {
-    name = "worker-price"
-    namespace = var.kubernetes_namespace
-    labels = {
-      App = "demo",
-      Demo = "pricing"
-    }
-  }
-
-  spec{
-    selector {
-      match_labels = {
-        App = "demo",
-        Demo = "pricing"
-      }
-    }
-    template {
-      metadata {
-        labels = {
-          App = "demo",
-          Demo = "pricing"
-        }
-      }
-
-      spec {
         container {
           image = "xcomponentteam/koordinator-demo-pricing:latest"
-          name  = "worker"
+          name  = "price-worker"
           env {
             name = "SCRIPT_NAME"
             value = "price.js"
@@ -252,14 +229,27 @@ resource "kubernetes_deployment" "worker_price" {
             value = "${var.koordinator_front}/taskstatusservice"
           }
           env {
+            name = "DEMO_SINGLE_NODE"
+            value = "true"
+          }
+          env {
             name = "DEMO_TOKEN"
             value   = var.koordinator_token
+          }
+          volume_mount {
+            name       = "topics"
+            mount_path = "/opt/demo/topics"
+          }
+        }
+        volume {
+          name = "topics"
+          empty_dir {
+            medium = "Memory"
           }
         }
       }
     }
   }
-
 }
 
 data "archive_file" "report_lambda" {
@@ -273,7 +263,7 @@ resource "aws_lambda_function" "report" {
   function_name = "DemoPricing_Report"
   role          = "arn:aws:iam::163696169398:role/S3FullAccess"
   handler       = "index.handler"
-
+  publish       = true
   source_code_hash = data.archive_file.report_lambda.output_base64sha256
 
   runtime = "nodejs10.x"
