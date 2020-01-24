@@ -1,3 +1,4 @@
+[![CircleCI](https://circleci.com/gh/xcomponent/koordinator-demo-pricing.svg?style=svg)](https://circleci.com/gh/xcomponent/koordinator-demo-pricing)
 
 # Demo Pricing Scenario
 
