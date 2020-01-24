@@ -1,0 +1,37 @@
+version: 2.1
+
+references:
+  terraform_install: &terraform_install
+    run:
+      name: Install terraform
+      command: |
+        cd /tmp
+        wget https://releases.hashicorp.com/terraform/0.12.16/terraform_0.12.16_linux_amd64.zip
+        unzip terraform_0.12.16_linux_amd64.zip
+        sudo mv terraform /usr/local/bin/
+  terraform_init: &terraform_init
+    run:
+      name: Init
+      command: |
+        cd /home/circleci/project/terraform
+        terraform init
+jobs:
+  terraform_validate_pullrequest:
+    docker:
+      - image: circleci/node:12.1
+    resource_class: small
+    steps:
+      - checkout
+      - *terraform_install
+      - *terraform_init
+      - run:
+          name: Validate terraform config
+          command: |
+            cd /home/circleci/project/terraform
+            terraform validate
+          no_output_timeout: "15m"
+
+workflows:
+  validate_pullrequest:
+    jobs:
+      - terraform_validate_pullrequest
