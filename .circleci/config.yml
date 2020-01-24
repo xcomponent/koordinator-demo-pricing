@@ -13,7 +13,7 @@ references:
     run:
       name: Init
       command: |
-        cd /home/circleci/project/terraform
+        cd /home/circleci/project/
         terraform init
 jobs:
   terraform_validate_pullrequest:
@@ -27,7 +27,7 @@ jobs:
       - run:
           name: Validate terraform config
           command: |
-            cd /home/circleci/project/terraform
+            cd /home/circleci/project/
             terraform validate
           no_output_timeout: "15m"
 
