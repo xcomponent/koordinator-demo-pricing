@@ -2,3 +2,4 @@ node_modules/
 *.tfvars
 .terraform
 *.zip
+*.tfstate
