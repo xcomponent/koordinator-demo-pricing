@@ -1,9 +1,9 @@
 resource "kubernetes_config_map" "scenario" {
   metadata {
-    name = "demo-pricing-scenario"
+    name      = "demo-pricing-scenario"
     namespace = var.kubernetes_namespace
     labels = {
-      App = "demo",
+      App  = "demo",
       Demo = "pricing"
     }
   }
@@ -15,10 +15,10 @@ resource "kubernetes_config_map" "scenario" {
 
 resource "kubernetes_job" "install_scenario" {
   metadata {
-    name = "install-scenario"
+    name      = "install-scenario"
     namespace = var.kubernetes_namespace
     labels = {
-      App = "demo",
+      App  = "demo",
       Demo = "pricing"
     }
   }
@@ -28,8 +28,8 @@ resource "kubernetes_job" "install_scenario" {
       metadata {}
       spec {
         container {
-          name    = "runner"
-          image   = "curlimages/curl:7.67.0"
+          name  = "runner"
+          image = "curlimages/curl:7.67.0"
           command = [
             "/usr/bin/curl",
             "-X", "POST",
@@ -41,7 +41,7 @@ resource "kubernetes_job" "install_scenario" {
             "--fail"
           ]
           volume_mount {
-            name = "config-volume"
+            name       = "config-volume"
             mount_path = "/opt/demo/config/"
           }
         }
