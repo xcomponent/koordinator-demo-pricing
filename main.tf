@@ -17,9 +17,3 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(var.kubernetes_cluster_ca_certificate)
   load_config_file       = false
 }
-
-resource "kubernetes_namespace" "demo" {
-  metadata {
-    name = var.kubernetes_namespace
-  }
-}
