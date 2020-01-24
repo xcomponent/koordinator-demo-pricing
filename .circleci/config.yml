@@ -30,6 +30,11 @@ jobs:
             cd /home/circleci/project/
             terraform validate
           no_output_timeout: "15m"
+      - run:
+          name: Format terraform config
+          command: |
+            cd /home/circleci/project/
+            terraform fmt -check=true -write=false -diff=true
 
 workflows:
   validate_pullrequest:
