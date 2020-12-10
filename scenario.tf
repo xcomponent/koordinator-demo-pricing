@@ -33,7 +33,7 @@ resource "kubernetes_job" "install_scenario" {
           command = [
             "/usr/bin/curl",
             "-X", "POST",
-            "${var.koordinator_front}/workflowsservice/api/scenario-definitions",
+            "${var.koordinator_front}/workflows/api/scenario-definitions",
             "-H", "Authorization: Bearer ${var.koordinator_token}",
             "-H", "Content-Type: application/json",
             "--data", "@/opt/demo/config/scenario.json",
