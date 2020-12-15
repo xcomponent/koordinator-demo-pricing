@@ -33,15 +33,15 @@ resource "kubernetes_deployment" "worker_init_pricing" {
           }
           env {
             name  = "DEMO_TASK_CATALOG_URL"
-            value = "${var.koordinator_front}/taskcatalogservice"
+            value = "${var.koordinator_front}/taskcatalog"
           }
           env {
             name  = "DEMO_POLLING_URL"
-            value = "${var.koordinator_front}/pollingservice"
+            value = "${var.koordinator_front}/polling"
           }
           env {
             name  = "DEMO_TASK_STATUS_URL"
-            value = "${var.koordinator_front}/taskstatusservice"
+            value = "${var.koordinator_front}/taskstatus"
           }
           env {
             name  = "DEMO_TOKEN"
@@ -89,15 +89,15 @@ resource "kubernetes_deployment" "pricing_pipeline" {
           }
           env {
             name  = "DEMO_TASK_CATALOG_URL"
-            value = "${var.koordinator_front}/taskcatalogservice"
+            value = "${var.koordinator_front}/taskcatalog"
           }
           env {
             name  = "DEMO_POLLING_URL"
-            value = "${var.koordinator_front}/pollingservice"
+            value = "${var.koordinator_front}/polling"
           }
           env {
             name  = "DEMO_TASK_STATUS_URL"
-            value = "${var.koordinator_front}/taskstatusservice"
+            value = "${var.koordinator_front}/taskstatus"
           }
           env {
             name  = "DEMO_SINGLE_NODE"
@@ -121,15 +121,15 @@ resource "kubernetes_deployment" "pricing_pipeline" {
           }
           env {
             name  = "DEMO_TASK_CATALOG_URL"
-            value = "${var.koordinator_front}/taskcatalogservice"
+            value = "${var.koordinator_front}/taskcatalog"
           }
           env {
             name  = "DEMO_POLLING_URL"
-            value = "${var.koordinator_front}/pollingservice"
+            value = "${var.koordinator_front}/polling"
           }
           env {
             name  = "DEMO_TASK_STATUS_URL"
-            value = "${var.koordinator_front}/taskstatusservice"
+            value = "${var.koordinator_front}/taskstatus"
           }
           env {
             name  = "DEMO_SINGLE_NODE"
